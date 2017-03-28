@@ -9,11 +9,9 @@
               <li class="active"><a href="index.php">Home</a></li>
               <li><a href="modules/sales/sales.php">Sales</a></li>
               <li><a href="modules/performance//kpi.php">Performance View</a></li>
-              <li><a href="modules/luckycahrms/luckycharms.php">Lucky Charms</a></li>
-              <li><a href="index.html">Contact</a></li>
+              <li><a href="modules/luckycharms/luckycharms.php">Lucky Charms</a></li>
             </ul>
 
         </div>
       </div>
 </header>
-    

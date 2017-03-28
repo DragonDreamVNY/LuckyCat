@@ -7,7 +7,7 @@ define ('__DEBUG',0);  //constants are defined using the define keyword 1=true, 
 
 define ('__USER_ERROR_PAGE', 'VIEWS/view_error.php');  //script to redirect to in case of error
 
-define ('__CSS','css/mystyle.css');  //reference to CSS 
+define ('__CSS','css/main.css');  //reference to CSS 
 
 define ('__LOGIN_ATTEMPT_MAX',3);  //limit the number of login attempts
 

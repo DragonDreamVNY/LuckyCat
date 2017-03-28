@@ -1,23 +1,30 @@
-<form class="login" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-<div>
-<h2>Login Form</h2>
-<table class="form">
-<tr><td>
-<label>
-<span>Lecturer ID</span><input name="lectID" type="text" >
-<span>Password</span><input name="lectPW" type="password" >
-</label>
-</td></tr>
+<form class="login" method="post" action="<?php echo 'controller_login_manager.php';?>">
 
-<tr><td>
-</td></tr>
+<div class="container">
+<div class="row">
+    <div class="col-md-offset-3 col-md-8">
+        <h2>Login Form</h2>
+        <table class="form">
+            <tr><td>
+                <label>
+                    <span>User Name</span><input class="form-control" name="username" type="text" placeholder="username">
+                    </br>
+                    <span>Password</span><input class="form-control" name="password" type="password" placeholder="password">
+                    </br>
+                </label>
+            </td></tr>
 
-<tr><td>
-<label>
-<span>Enter your details</span>
-<input name="processLogIn" type="submit" id="sendButton" value="Login">
-</label>
-</td></tr>
-</table>
+            <tr><td>
+            </td></tr>
+
+            <tr><td>
+            <label>
+                <input name="login" type="submit" id="login" value="Login">
+            </label>
+            </td></tr>
+        </table>
+    </div>
+</div><!--end row-->
 </div>
+
 </form>

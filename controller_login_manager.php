@@ -1,7 +1,7 @@
 <?php
 //includes
-include_once("CONFIG/config.php");  //include the application configuration settings
-include_once("CONFIG/connection.php"); //include the database connection
+include_once("config/config.php");  //include the application configuration settings
+include_once("config/connection.php"); //include the database connection
 
 //Start/join a session
 if (session_status() == PHP_SESSION_NONE) {
@@ -71,13 +71,13 @@ if(isset($_POST['logout3'])){//Logout Method 3: has the logout3 button been pres
 if(isset($_POST['login'])){//Has the login button been pressed
 	//check the login credentials are valid
 	//get the form values entered
-	$userID=$_POST['lectID'];
-	$userPW=$_POST['lectPass'];
-	$passEncrypt= hash('ripemd160', $userPW);  //encrypt the password 	
+	$userID=$_POST['username'];
+	$userPW=$_POST['password'];
+	//$passEncrypt= hash('ripemd160', $userPW);  //encrypt the password 	
 
 	//construct the SQL query  (UNCOMMENT THE SQL AS APPROPRIATE)
 	//$sql= "SELECT * FROM lecturer WHERE LectID='$userID' AND password='$userPW'";  //password is not encrypted in DB
-	$sql= "SELECT * FROM lecturer WHERE LectID='$userID' AND password='$passEncrypt'"; //password is encrypted in DB
+	$sql= "SELECT * FROM user WHERE user_LoginName='$userID' AND user_Password='$userPW'"; //password is encrypted in DB
 	$msg=$sql;
 	
 	//execute the query
@@ -91,12 +91,12 @@ if(isset($_POST['login'])){//Has the login button been pressed
 			$row = $rs->fetch_assoc();  //get the data in the row
 			
 			//put the logged in user data into the $_SESSION array
-			$_SESSION['firstName']=$row['FirstName'];
-			$_SESSION['lastName']=$row['LastName'];
+			$_SESSION['firstName']=$row['user_FirstName'];
+			$_SESSION['lastName']=$row['user_LastName'];
 			
 			//user is now logged in
 			$msg='<h3>Controller Message: Logged in Successfully<h3>';
-			$msg.='Welcome '.$_SESSION['firstName'].' '. $_SESSION['lastName'].' You are now logged in';
+			$msg.='Welcome '.$_SESSION['user_FirstName'].' '. $_SESSION['user_LastName'].' You are now logged in';
 			
 			//redirect to the logged in user home page voa the login controller
 			echo '<meta http-equiv="Refresh" content="0;url=controller_login_manager.php" />';
@@ -118,8 +118,8 @@ if(isset($_POST['login'])){//Has the login button been pressed
 			$msg.= "<h3>Unauthorised Access Prohibited</h3>";
 			$msg.= "You have exceeded the permitted number of login attempts. Your account will be disabled. ";
 			$title='Login Blocked';
-			$pageHeading="Ex03 - Login Blocked";
-			include("VIEWS/view_ex05_blocked.php");
+			$pageHeading="Login Blocked";
+			include("modules/login/view_blocked.php");
 			//
 			
 			//
@@ -128,8 +128,8 @@ if(isset($_POST['login'])){//Has the login button been pressed
 			}
 			else{
 				//login was unsuccessful - try again
-				include("MODELS/model_ex05.php"); 
-				include("VIEWS/view_home.php");
+				include("modules/home/model_home.php"); 
+				include("modules/home/view_home.php");
 			}
 			
 
@@ -138,21 +138,21 @@ if(isset($_POST['login'])){//Has the login button been pressed
 else{ //login button has not been pressed 
 	if($_SESSION['loggedin']==1){ //user is already logged in
 		//DISPLAY the logged in user home page
-		include("MODELS/model_ex05.php"); 
-		include("VIEWS/view_home.php");
+		include("modules/home/model_home.php"); 
+		include("modules/home/view_home.php");
 	}
 	else{//not logged in
 		$remainingLogins=$attemptsMax-$_SESSION['loginAttempts'];  //check number of remaining attempts
 		if ($remainingLogins>0){
 			//login button is not pressed and still some attempts remaining redirect to login
-			include("MODELS/model_ex05.php"); 
-			include("VIEWS/view_home.php");	
+			include("modules/home/model_home.php"); 
+			include("modules/home/view_home.php");	
 		}
 		else{
 			//number of login attempts exceeded show blocked page
 			$title='Login Blocked';
-			$pageHeading="Ex05 - Login Blocked";
-			include("VIEWS/view_ex05_blocked.php");
+			$pageHeading="Login Blocked";
+			include("modules/home/view_home.php");
 			
 		}
 		
