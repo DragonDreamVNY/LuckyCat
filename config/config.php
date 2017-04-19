@@ -3,12 +3,12 @@
 //these are defined as global constants which will be available in ALL SCRIPTS, CLASSES and FUNCTIONS
 $base_url = 'http://localhost/luckycat';
 
-define ('__DEBUG',0);  //constants are defined using the define keyword 1=true, 0=false
+define ('__DEBUG',TRUE);  //constants are defined using the define keyword 1=true, 0=false
 
-define ('__USER_ERROR_PAGE', 'VIEWS/view_error.php');  //script to redirect to in case of error
+define ('__USER_ERROR_PAGE', 'error.php');  //script to redirect to in case of error
 
 define ('__CSS','css/main.css');  //reference to CSS 
 
-define ('__LOGIN_ATTEMPT_MAX',3);  //limit the number of login attempts
+define ('__LOGIN_ATTEMPT_MAX',5);  //limit the number of login attempts
 
 ?>

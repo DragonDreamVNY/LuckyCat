@@ -10,13 +10,12 @@
 <title><?php echo $tab; ?></title>
 <link rel="stylesheet" type="text/css" href="<?php echo __CSS;?>">
 
- <meta name="description" content="">
+<meta name="description" content="">
 <meta name="viewport" content="width=device-width">
 
-<!--============= STYLES section=============-->
+<!--============= STYLES & JQuery section=============-->
 <!--========================================-->
 <?php require("inc/head.php"); ?>
-
 </head>
 <body>
 <!--[if lte IE 8]>
@@ -40,7 +39,10 @@
 <!--============= MAIN section=============-->
 <!--========================================-->
 <section>
-    <?php echo $contentStringMAIN; ?>
+    <?php echo $contentStringMAIN; 
+        // include(forms/loginForm.html);
+    ?>
+
 </section>
 
     <!--[if lt IE 9]>

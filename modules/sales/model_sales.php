@@ -1,77 +1,87 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 //initialise session variables
-if(!isset($_SESSION['loggedin'])){$_SESSION['loggedin']=0;}
+if(!isset($_SESSION['loggedin'])){$_SESSION['loggedin']=false;}
 if(!isset($_SESSION['loginAttempts'])){$_SESSION['loginAttempts']=0;}
 if(!isset($_SESSION['views'])){$_SESSION['views']=0;}
 
-//template values
-$title;
-$pageHeading='You are Logged In';
+// $_SESSION['loggedin']=true; //logged In
 
-if ($_SESSION['loggedin']==1){
-	//nav section content - logged in user
-	$contentStringNAV='<header id="SiteHeader" class = "header">';
-	$contentStringNAV.= '<h2>Welcome</h2>';
-	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
-	$contentStringNAV.= 	'<div class="container">';
-	$contentStringNAV.= 		'<div class="navbar-header">';
-	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
-	$contentStringNAV.= 	'</div>';
+//prepare view template values
+//$tab='Lucky Cat';
+$pageHeading='Sales Page';
 
-	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
-	$contentStringNAV.= 		'<li class="active"><a href="index.php">Home</a></li>';
-	$contentStringNAV.= 		'<li><a href="modules/sales/view_sales.php">Sales</a></li>';
-	$contentStringNAV.= 		'<li><a href="modules/performance//view_kpi.php">Performance View</a></li>';
-	$contentStringNAV.= 		'<li><a href="modules/luckycharms/luckycharms.php">Lucky Charms</a></li>';
-	$contentStringNAV.= 		'<li><a href="controller_login_manager.php">RELOAD</a></li>';
-	$contentStringNAV.= 	'</ul>';	
-	$contentStringNAV.= 	'</div>';
-	$contentStringNAV.= '</div>';
-	$contentStringNAV.= '</header>';
+//initialise variables
+$table='sales';  //table to insert values into
+$msg='';  //this is an empty message initially , it will contain the result of the insertion
 
+// =====================
+// 		NAVIGATION
+// =====================
+//nav section content - logged in user
+if ($_SESSION['loggedin']==TRUE){
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+				<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>
+				</div>
+
+				<ul class="nav navbar-nav">
+					<li><a href="index.php"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;Home</a></li>
+					<li class="active"><a href="controller_sales.php">Sales</a></li>
+					<li><a href="controller_performance.php">Performance View</a></li>
+					<li><a href="controller_charms.php">Lucky Charms</a></li>
+					<li><a href="controller_login_manager.php">RELOAD</a></li>
+				</ul>	
+			</div>
+		</div>';
 }
 else{
 	//nav section content - not logged in
 	$contentStringNAV='';
+	$contentStringNAV.='You Are NOT LOGGED IN boo';
 	$contentStringNAV.='<a href="controller_main.php">HOME</a></br>';
 }
-$pageHeading = "";
+// =====================
+// 		MAIN
+// =====================
 //main section content:
-$contentStringMAIN=''; 
-if ($_SESSION['loggedin']==1){
+$contentStringMAIN='';
+
+if ($_SESSION['loggedin']==true){
 	//main section content - logged in user
-    $contentStringMAIN.='<p>Welcome '.$_SESSION['firstName'].' to your Dashboard.</p>';
+    //$contentStringMAIN.='<p>Hello '.$_SESSION['user_FirstName'].' : Please select from below.</p>';
 
     $contentStringMAIN.='<div class="jumbotron">';
 	$contentStringMAIN.=	'<h1>Lucky Cat Business Dashboard</h1>';
 	$contentStringMAIN.=	'<p class="lead">';
 	$contentStringMAIN.=	'<img src="images/luckycatDash.png" alt="lucky cat logo"><br>';
 	$contentStringMAIN.=	'</p>';
+
+	// Sales CRUD selections
     $contentStringMAIN.=	'<div class="btn-group">';
-
-    $contentStringMAIN.=		'<a href="modules/sales/view_sales.php"><button class="btn btn-success" role="button">';
-    $contentStringMAIN.=		'Sales Data';
+    $contentStringMAIN.=		'<a href="controller_insertSales.php"><button class="btn btn-info" role="button">';
+    $contentStringMAIN.=		'Insert Sales Data';
     $contentStringMAIN.=		'</button></a>';
 
-	$contentStringMAIN.=		'<a href="modules/performance/kpi.php"><button class="btn btn-primary" role="button">';
-    $contentStringMAIN.=		'Performance View';
-    $contentStringMAIN.=		'</button></a>';
-
-    $contentStringMAIN.=		'<a href="modules/luckycharms/luckycharms.php"><button class="btn btn-danger" role="button">';
-    $contentStringMAIN.=		'Lucky Charms';
+	$contentStringMAIN.=		'<a href="controller_crudSales.php"><button class="btn btn-warning" role="button">';
+    $contentStringMAIN.=		'Edit/Delete Sales Data';
     $contentStringMAIN.=		'</button></a>';
     $contentStringMAIN.=	'</div>';
-    $contentStringMAIN.='</div>';
-
+    $contentStringMAIN.='</div>'; //end jumbo
 
     //logout form
 	$contentStringMAIN.='<form method="post" action="controller_login_manager.php">';
-	$contentStringMAIN.='<input name="logout3" type="submit" id="logout3" value="Log Out">';
+	$contentStringMAIN.='<input name="logout" type="submit" id="logout" value="Log Out">';
 	$contentStringMAIN.='</form>';
 
 }
 else{
-	// Log In Form
+	// =====================
+	// 		Log In Form
+	// =====================
 	//main section content - user not logged in
 	
 	$contentStringMAIN.='<form class="login" method="post" action="controller_login_manager.php">';
@@ -125,41 +135,14 @@ if (__DEBUG==1) //construct the footer with debug information
 			$contentStringFOOTER.=  '<h4>SQL QUERY</h4>';
 			$contentStringFOOTER.= $sql;
 		}
-		
 
-		
 		$contentStringFOOTER.=  "</footer>";
 	}
 else{ //construct the standard footer
+	// include("inc/footer.php");
 	$contentStringFOOTER.='<footer class="copyright">';
 	$contentStringFOOTER.= 'Copyright 2017 Vincent Lee';
 	$contentStringFOOTER.= "</footer>";
 }
 
-
-
 ?>
-
-
-</body>
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- 
-
-
-

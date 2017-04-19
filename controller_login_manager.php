@@ -1,4 +1,8 @@
 <?php
+/*=================================
+ * Log In Manager: 
+ * login, cookies, session, logout, login attempts, redirects
+ *=================================*/
 //includes
 include_once("config/config.php");  //include the application configuration settings
 include_once("config/connection.php"); //include the database connection
@@ -9,15 +13,15 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 
 //initialise session variable used by controller
-if(!isset($_SESSION['loggedin'])){$_SESSION['loggedin']=0;}
-if(!isset($_SESSION['loginAttempts'])){$_SESSION['loginAttempts']=0;}
-if(!isset($_SESSION['views'])){$_SESSION['views']=0;}
+if( !isset($_SESSION['loggedin']) ){ $_SESSION['loggedin']=FALSE; }
+if( !isset($_SESSION['loginAttempts']) ){ $_SESSION['loginAttempts']=0; }
+if( !isset($_SESSION['views'])){$_SESSION['views']=0; }
 
 //get the maximum number of login attempts from the CONFIG file
 $attemptsMax=__LOGIN_ATTEMPT_MAX;  //this will be used to limit the number of login attempts
 
 //set up a session variable to count the page views if the user loggedin variable is set
-if($_SESSION['loggedin']==1){  //already logged in
+if($_SESSION['loggedin']==TRUE){  //already logged in
 	$msg='Controller Msg: Already Logged In';
 	if(isset($_SESSION['views']))
 		$_SESSION['views']++;
@@ -29,12 +33,12 @@ else{
 }
 
 //process logout
-if(isset($_POST['logout1'])){//Logout Method 1: has the logout1 button been pressed
+if(isset($_POST['logout1'])){ // Logout Method 1: has the logout1 button been pressed
 	if(isset($_SESSION['loggedin'])) unset($_SESSION['loggedin']);
 	$msg="Logout Method 1 - Kills a specific session variable (‘loggedin’). Other session variable ('views') remains available. The session is not destroyed.The client machine cookie in which the session ID is stored is not killed.";
 }
 
-if(isset($_POST['logout2'])){//Logout Method 2: has the logout2 button been pressed
+if(isset($_POST['logout2'])){ // Logout Method 2: has the logout2 button been pressed
 	session_destroy();  
 	/*
 	*	session_destroy() 
@@ -43,7 +47,7 @@ if(isset($_POST['logout2'])){//Logout Method 2: has the logout2 button been pres
 	*	or unset the session cookie. To use the session variables again, 
 	*	session_start() has to be called
 	*/
-	$msg="Logout Method 2 - Kills ALL the session variables.Kills the session.Does not kill the session ID COOKIE on the client machine.";
+	//$msg="Logout Method 2 - Kills ALL the session variables.Kills the session.Does not kill the session ID COOKIE on the client machine.";
 }
 
 if(isset($_POST['logout3'])){//Logout Method 3: has the logout3 button been pressed
@@ -60,49 +64,57 @@ if(isset($_POST['logout3'])){//Logout Method 3: has the logout3 button been pres
 	session_destroy();
 	$msg="Logged Out Successfully";
 
+	include("controller_main.php"); //reloads to the main page
+	exit(0);
 
-        include("controller_main.php"); 
-        exit(0);
-	
-	
-	}
+}
+
+//salts for the password before encryption
+$salt1 = "!lng";
+$salt2 = "&fng";
 
 //process login
-if(isset($_POST['login'])){//Has the login button been pressed
-	//check the login credentials are valid
-	//get the form values entered
-	$userID=$_POST['username'];
-	$userPW=$_POST['password'];
-	//$passEncrypt= hash('ripemd160', $userPW);  //encrypt the password 	
+if(isset($_POST['login'])){// Has the login button been pressed?
+	//==========================================
+	// (1) check the login credentials are valid
+	//==========================================
+	$table = "users"; // 'users' table in lucky cat database
 
-	//construct the SQL query  (UNCOMMENT THE SQL AS APPROPRIATE)
-	//$sql= "SELECT * FROM lecturer WHERE LectID='$userID' AND password='$userPW'";  //password is not encrypted in DB
-	$sql= "SELECT * FROM user WHERE user_LoginName='$userID' AND user_Password='$userPW'"; //password is encrypted in DB
-	$msg=$sql;
+	//get the form values entered
+	$userID = mysqli_real_escape_string($conn, $_POST['username']);
+	$userPW = mysqli_real_escape_string($conn, $_POST['password']);
+	//$passEncrypt= hash('ripemd160', $userPW);  //encrypt the password 	
+	$passEncrypted = sha1("$salt1$userPW$salt2");  //encrypt the password 	
+
+	//construct the SQL query  
+	$sql= "SELECT * FROM $table WHERE user_LogInName='$userID' AND user_Password='$passEncrypted'"; //password is encrypted in DB
+	//$msg=$sql;
 	
 	//execute the query
-	$rs=$conn->query($sql);  //execute the query
+	$rs = $conn->query($sql);  //execute the query
 	
 	//check the login credentials
 	if($rs->num_rows==1) //process the login credentials
-		{  //login is successful
-			$_SESSION['loggedin']=1;
-			$rs->data_seek(0);  //point to the current row
-			$row = $rs->fetch_assoc();  //get the data in the row
-			
-			//put the logged in user data into the $_SESSION array
-			$_SESSION['firstName']=$row['user_FirstName'];
-			$_SESSION['lastName']=$row['user_LastName'];
-			
-			//user is now logged in
-			$msg='<h3>Controller Message: Logged in Successfully<h3>';
-			$msg.='Welcome '.$_SESSION['user_FirstName'].' '. $_SESSION['user_LastName'].' You are now logged in';
-			
-			//redirect to the logged in user home page voa the login controller
-			echo '<meta http-equiv="Refresh" content="0;url=controller_login_manager.php" />';
-			
-			//header("Location:controller_login_manager.php"); /* Redirect browser */
-			//exit;
+	{  //login is successful
+		$_SESSION['loggedin']=TRUE;
+		$rs->data_seek(0);  //point to the current row
+		$row = $rs->fetch_assoc();  //get the data in the row
+		
+		//put the logged in user data into the $_SESSION array
+		$_SESSION['user_FirstName']=$row['user_FirstName'];
+		$_SESSION['user_LastName']=$row['user_LastName'];
+		$_SESSION['user_Role']=$row['user_Role'];
+		$_SESSION['user_LogInName']=$row['user_LogInName'];
+
+		//user is now logged in
+		$msg='<h3>Controller Message: Logged in Successfully<h3>';
+		$msg.='Welcome '.$_SESSION['user_FirstName'].' '. $_SESSION['user_LastName'].' You are now logged in';
+		
+		//redirect to the logged in user home page via the login controller
+		echo '<meta http-equiv="Refresh" content="0;url=controller_login_manager.php" />';
+		
+		//header("Location:controller_login_manager.php"); /* Redirect browser */
+		//exit;
 
 	} //end login successful section
 	else{   //login is not successful	
@@ -121,27 +133,23 @@ if(isset($_POST['login'])){//Has the login button been pressed
 			$pageHeading="Login Blocked";
 			include("modules/login/view_blocked.php");
 			//
-			
-			//
-			// If required - insert code here to lock the account
-			//
-			}
-			else{
-				//login was unsuccessful - try again
-				include("modules/home/model_home.php"); 
-				include("modules/home/view_home.php");
-			}
-			
 
-	}
-}
+		}
+		else{
+			//login was unsuccessful - try again
+			include("modules/home/model_home.php"); 
+			include("modules/home/view_home.php");
+		}
+
+	} //end login not successful
+} // end if login button pressed
 else{ //login button has not been pressed 
-	if($_SESSION['loggedin']==1){ //user is already logged in
+	if($_SESSION['loggedin']==TRUE){ //user is already logged in
 		//DISPLAY the logged in user home page
 		include("modules/home/model_home.php"); 
 		include("modules/home/view_home.php");
 	}
-	else{//not logged in
+	else{ // not logged in
 		$remainingLogins=$attemptsMax-$_SESSION['loginAttempts'];  //check number of remaining attempts
 		if ($remainingLogins>0){
 			//login button is not pressed and still some attempts remaining redirect to login
@@ -154,9 +162,8 @@ else{ //login button has not been pressed
 			$pageHeading="Login Blocked";
 			include("modules/home/view_home.php");
 			
-		}
-		
+		}	
 	}
-}
+} // end login button has not been pressed
 
 ?>

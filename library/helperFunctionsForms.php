@@ -1,7 +1,6 @@
 <?php
 //helper functions. Dynamically generate a form using this function
-function generateStudentEditForm($studID,$firstName,$lastName,$action)
-{
+function generateStudentEditForm($studID,$firstName,$lastName,$action) {
 echo '<form class="edit" method="post" action="'.$action.'">';
 echo '<div>';
 echo '<h2>Edit Student ID: '.$studID.'</h2>';

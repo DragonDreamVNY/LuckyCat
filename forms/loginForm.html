@@ -7,9 +7,9 @@
         <table class="form">
             <tr><td>
                 <label>
-                    <span>User Name</span><input class="form-control" name="username" type="text" placeholder="username">
+                    <span>User Name</span><input class="form-control" name="username" type="text" pattern="[a-zA-Z0-9]+" placeholder="username">
                     </br>
-                    <span>Password</span><input class="form-control" name="password" type="password" placeholder="password">
+                    <span>Password</span><input class="form-control" name="password" type="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$"  placeholder="password">
                     </br>
                 </label>
             </td></tr>

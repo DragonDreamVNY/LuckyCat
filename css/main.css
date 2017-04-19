@@ -1,3 +1,23 @@
+/*Colours*/
+/*
+#454372 INDEPENDENCE purple
+#B9C0DA LIGHT STEEL BLUE
+##E9AFA3 PASTEL PINK
+#A6B1E1 MAXIMUS BLUE PURPLE
+#DECDF5 PALE LAVENDER
+#B3DEC1 SEAFOAM GREEN
+#A52A2A DEEP RED
+#7BB661 SPRING GREEN
+#FFFFFF WHITE
+*/
+
+/*Font Awesome 4.7.0*/
+@font-face {
+    font-family: "fontawesome-webfont.eot";
+    src: url(vendor/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf) format("truetype");
+}
+
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -50,12 +70,13 @@ body {
     box-shadow:0 1px 0 #cfcfcf;
 }
 
-.form-control {
-    border-radius: 10px;
-}
-
 .container-narrow > hr {
   margin: 30px 0;
+}
+
+.form-control {
+    border-radius: 10px;
+    margin:2px  !important;
 }
 
 /* Main marketing message and sign up button */
@@ -76,6 +97,138 @@ body {
   margin-top: 28px;
 }
 
+.form_input{
+    margin-bottom: 10px;
+}
+
+.form-inline .form-group{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/*===============*/
+/* Sales Crud BOX Styles*/
+/*===============*/
+
+/*center columns in Bootstrap*/
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}
+
+.box{
+  width:750px;
+  padding:20px;
+  background-color: #A6B1E1;   /*MAXIMUS BLUE PURPLE*/
+  border: 1px solid #ccc;
+  border-radius:5px;
+  margin-top:100px;
+}
+
+th.tableHeader{
+  background-color: #B9C0DA; /*LIGHT STEEL BLUE*/
+  text-align: center;
+}
+
+td .tableContent{
+  padding: 4px;
+  background-color: #E9AFA3; /*PASTEL PINK*/
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tr:hover {
+  background-color: #A6B1E1; /*MAXIMUS BLUE PURPLE*/
+}
+
+/*===============*/
+/*Password Strength classes*/
+/*===============*/
+span.weak{
+	color:#F08A4B;
+}
+
+span.good{
+	color:#2D98F3;
+}
+
+span.strong{
+	color:#006400;
+}
+
+span.short
+{
+color:#FF0000;
+}
+
+.debug{
+  margin-top: 15px;
+}
+
+.copyright{
+  background-color: lightcyan !important;
+}
+/*==========*/
+
+/*==================
+Morris Chart styles
+====================*/
+#salesChart{
+  height:400px;
+}
+
+#chart{
+  height:400px;
+}
+
+.tab-box .panel-heading > .nav-tabs {
+    float: right;
+    margin-top: -2px;
+    display: inline-block;
+    border-bottom: 0;
+}
+.tab-box .panel-heading > .nav-tabs > li > a {
+    border: 0;
+    padding: 6px 7px;
+}
+@media (min-width: 444px) {
+    .tab-box .panel-heading > .nav-tabs > li > a {
+        padding: 6px 15px;
+    }
+}
+.tab-box .panel-heading > .nav-tabs > li.active > a {
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+    border-bottom: 0;
+    border-top: 1px solid #7c1c1d;
+    background: #fff;
+}
+.panel.panel-default > .panel-heading h3 {
+    display: inline-block;
+}
+svg {
+    width: 100% !important;
+}
+
+#total_sales_legend{
+  background-color: #454372; /*PURPLE*/
+}
+
+#dinein_sales_legend{
+  background-color: #A52A2A; /*RED*/
+}
+
+#takeaway_sales_legend{
+  background-color: #A6B1E1; /*INDIGO*/
+}
+
+#delivery_sales_legend{
+background-color: #7BB661; /*GREEN*/
+}
+
+/*=======--- end MorrisCharts ---======*/
+/*======================================*/
 /* Responsive: Portrait tablets and up */
 @media screen and (min-width: 768px) {
   .container {

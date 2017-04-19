@@ -1,56 +1,46 @@
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html;" charset="UTF-8">
-<html>
+<!doctype html>
+
 <head>
+<meta charset="utf-8">
 <title><?php echo $tab; ?></title>
-<link rel="stylesheet" type="text/css" href="<?php echo __CSS;?>">
 
-<!--jQuery Library-->
-<script src=
-"http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
-</script>
-		
-<script src="LIBRARY/JSCRIPT/pwStrengthScript.js"></script>	
-
-
+<!--STYLES & jQuery Library-->
+<?php require("inc/head.php"); ?>		
 </head>
 <body>
-<!----------------- HEADER SECTION ----------------------->
-<!-------------------------------------------------------->
+
+<!--============= HEADER section=============-->
+<!--========================================-->
 <header>
-<h2><?php echo $pageHeading; ?></h2>
+
+    
 </header>
 
-<!----------------NAVIGATION SECTION---------------------->
-<!-------------------------------------------------------->
+<!--============= NAVIGATION section=============-->
+<!--========================================-->
 
 <nav>
-<?php echo $contentStringNAV;?>
+   <?php echo $contentStringNAV; ?>
 </nav>
 
 
-<!----------------MAIN SECTION---------------------------->
-<!-------------------------------------------------------->
-<section>
+<!--============= MAIN section=============-->
+<!--========================================-->
+<section class = "container">
+	<div>
 <?php 
-	echo $contentStringMAIN;
-	include 'FORMS/newUserFormValidatedStrengthEx04.html'; 
+//echo $contentStringMAIN;
+include 'forms/registerForm.html'; 
  ?>
-
-
+ <div>
 </section>
 
-
-<!----------------RHS SECTION----------------------------->
-<!-------------------------------------------------------->
-<section class="right">
-<?php echo $contentStringRHS; ?>
-</section>
-
-
-
-<!----------------FOOTER section-------------------------->
-<!-------------------------------------------------------->
+<!--============= FOOTER section=============-->
+<!--========================================-->
 <?php echo $contentStringFOOTER; ?>
+<!-- JAVASCRIPT -->
+<?php require('inc/tail.php'); ?>
+<script src="library/scripts/pwStrengthScript.js"></script>	
 </body>
 </html>
 

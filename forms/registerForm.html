@@ -1,0 +1,47 @@
+
+    <form id="formRegisterUser" class="form-inline" method="post" autocomplete="on" action="controller_register.php">
+        <h2>New User Registration Form</h2>
+        <div class="form-group">
+            <label for "userFirstName_Input"> First Name</label>
+            <input name="user_FirstName" id="userFirstName_Input" class="form-control" type="text" title="First Name (up to 45 Characters)" autofocus required>
+            <label for "userLastName_Input">Last Name</label>
+            <input name="user_LastName" id="userLastName_Input" class="form-control" type="text" title="Last Name (up to 45 Characters)" required>     
+        </div>
+        <div class="form-group">
+            <label for "userLogInName_Input" class="control-label"> Username</label>
+            <input name="user_LogInName" id="userLogInName_Input" class="form-control" type="text" title="username (10 Characters)" data-tip="Enter Characters A-Z,a-z and/or numbers 0-9" required> 
+            <br/>
+            <label for "userEmail_Input">E-Mail</label>
+            <input name="user_Email" id="userEmail_Input" class="form-control" type="email" required>
+        </div>
+        <div class="col-md-12">
+            <div class="form-inline"> 
+                <div class="form-group">
+                    <label for "newUser_Password" class="control-label"> Password</label>
+                    <input name="user_Pass1" id="newUser_Password" class="form-control" type="password" required="true" title="Password (6 or more  Characters)  Permitted are these characters: a-z,A-Z,0-9 and underscore,$,%,^,&,*" pattern="[A-Za-z-0-9_$%^&*]{5,}">
+                    <label> Re-enter Password</label>
+                    <input name="user_Pass2" class="form-control" type="password" required="true" title="Password (6 or more  Characters)  Permitted are these characters: a-z,A-Z,0-9 and underscore,$,%,^,&,*" pattern="[A-Za-z-0-9_$%^&*]{5,}">
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="form-group">
+            <label for="roleSelect">Select User Role:</label>
+            <select name="user_Role" class="form-control" id="roleSelect">
+                <option value="manager">Manager</option>
+                <option value="accountant">Accountant</option>
+                <option value="marketer">Marketer</option>
+                <option value="admin">Admin</option>
+            </select>
+        </div>
+      <div>
+          <span style="color:#E31717" >Password Strength Indicator : </span><span id="result"></span>
+      </div>
+        <div>
+            <label for "regButton">
+            <input name="btn_register" type="submit" id="regButton" class="btn btn-primary" value="Register">
+            </label>
+        </div>
+    </form>
+
+

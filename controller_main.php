@@ -6,7 +6,7 @@ include_once("config/config.php");  //include the application configuration sett
 session_start();  //this must come BEFORE the <HTML> tag
 
 //initialise session variable used by controller
-if(!isset($_SESSION['loggedin'])){$_SESSION['loggedin']=0;}
+if(!isset($_SESSION['loggedin'])){$_SESSION['loggedin']=FALSE;}
 if(!isset($_SESSION['loginAttempts'])){$_SESSION['loginAttempts']=0;}
 if(!isset($_SESSION['views'])){$_SESSION['views']=0;}
 

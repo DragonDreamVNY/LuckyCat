@@ -1,0 +1,45 @@
+<div class ="container">
+    <form id="formSalesInsert" class="form-inline" method="post" autocomplete="on" action="controller_insertSales.php">
+        <h2>Insert Sales Form</h2>
+        <!--date picker-->
+        <div class="col-md-12">        
+            <div class="form-group">           
+                <div class="date" id="datetimepicker1">
+                    <label for "sale_date">Pick Date</label>
+                    <input name="sale_date" id="sale_date" type="text" class="form-control">
+                </div>
+            </div>
+            <!--<div id="output"></div>
+            <div id="output2"></div>
+            <div id="output3"></div>
+            <div id="output4"></div>
+            <div id="output5"></div>-->
+        </div>
+        <!--end date picker: see JavaScript for settings-->
+
+        <div id = "saleValues" class="form-inline"> 
+            <div class="form-group">
+                <label for "dineIn_sales"> DineIn: €</label>
+                <input name="dineIn_sales" id="dineIn_sales"  class="form-control salesInputs" type="number" step="0.10" value="" required>
+                <br>
+                <label for "takeOut_sales">TakeOut: €</label>
+                <input name="takeOut_sales" id="takeOut_sales" class="form-control salesInputs" type="number" step="0.10" value="" required>     
+                <br>
+                <label for "delivery_sales">Deliveries: €</label>
+                <input name="delivery_sales" id="delivery_sales" class="form-control salesInputs" type="number" step="0.01" value="" required> 
+                <div id="saleSumTotal"></div>    
+            </div>
+        </div>
+        <div>
+            <label>
+                <input name="btn_insertSales" class="btn btn-primary" type="submit" id="insertSales_Button" value="Insert">
+            </label>
+
+            <!--for update queries on current record selected-->
+            <!--<input type = "hidden" name="id" id="TransactionID" /> -->
+            
+            <!--Button text updated by AJAX and calls different queries-->
+            <!--<button type="button" name="action" id="action" class="btn btn-warning">Insert</button>-->
+        </div>  
+    </form>
+</div>

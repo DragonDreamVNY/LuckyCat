@@ -17,8 +17,6 @@
 //========================================================//
 echo '<nav>';
 echo "<h3>NAV SECTION</h3>";
-echo '<a href="http://php.net/manual/en/book.mysqli.php">MySQLi Manual</a><br>';
-echo '<h4>Examples</h4>';
 echo '<a href="controller_main.php">HOME</a><br>';
 echo "</nav>";
 ?>
@@ -82,7 +80,7 @@ if (__DEBUG==1)
 	else
 	{
 	echo '<footer class="copyright">';
-	echo 'Copyright 2017 Gerry Guinane';
+	echo 'Copyright 2017 VLee';
 	echo "</footer>";
 	}
 
