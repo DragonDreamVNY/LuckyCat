@@ -27,8 +27,9 @@ function getTableData($connection,$sql) {
 	}
 }
 
-function checkResultSet($rs) {
-	if($rs === FALSE) {
+function checkResultSet($resultSet) 
+{
+	if($resultSet === FALSE) {
 		if (__DEBUG==TRUE) {
 			//DEBUG mode is enabled
 			echo '<hr><h2>helperFunctionsTables.php  - getTableDataDbug Information:</h2>';
@@ -40,11 +41,11 @@ function checkResultSet($rs) {
 		}
 	} else {
 		
-		while ($row = $rs->fetch_assoc()) {
-			$arr[] = $row; //put the result into an array
+		while ($row = $resultSet->fetch_assoc()) {
+			$array[] = $row; //put the result into an array
 		}               
                 
-		return $arr;
+		return $array;
 	}
 }
 
@@ -124,19 +125,20 @@ function generateEditDeleteTable($tableName, $pk, $titlesResultSet, $dataResultS
 	//then generate the table of data with buttons for edit and delete
 	foreach($dataResultSet as $row) {
 		echo '<tr>';
-		echo '<td>'.$row['user_ID'].'</td>';
-		echo '<td>'.$row['user_Role'].'</td>';
-		echo '<td>'.$row['user_FirstName'].'</td>';
-		echo '<td>'.$row['user_LastName'].'</td>';
-		echo '<td>'.$row['user_Email'].'</td>';
-		
-		echo '<form class="small_button"  action="controller_Ex03_delete_and_edit.php" method="post">';
-		echo '<td><input class="smallBtn"  type="submit"  value="Delete" name="btn_select_for_deletion"></td>';
-		echo '<td><input class="smallBtn"  type="submit"  value="Edit" name="btn_edit"></td>';
-		echo '<input type="hidden" value="'.$row[$pk].'" name="user_ID">';//when the button is pressed the 
-																				//$index 'hidden' value is inserted 
-																				//into the $_POST array
-																				// either DELETE or EDIT, Primary Key is the one for THIS ROW
+		echo '<td>'.$row['TransactionID'].'</td>';
+		echo '<td>'.$row['SalesDate'].'</td>';
+		echo '<td>'.$row['TotalSales'].'</td>';
+		echo '<td>'.$row['DineInSales'].'</td>';
+		echo '<td>'.$row['TakeAwaySales'].'</td>';
+		echo '<td>'.$row['DeliverySales'].'</td>';
+		echo '<form class="small_button"  action="controller_editSales.php" method="post">';
+		echo '<td><input class="btn btn-warning"  type="submit"  value="Edit" name="btn_edit"></td>';
+		echo '<td><input class="btn btn-danger"  type="submit"  value="Delete" name="btn_select_for_deletion"></td>';
+		echo '<input type="hidden" value="'.$row['TransactionID'].'" name="user_ID">';
+		//when the button is pressed the 
+		//$index 'hidden' value is inserted 
+		//into the $_POST array
+		// either DELETE or EDIT, Primary Key is the one for THIS ROW
 		echo '</form>';
 
 		echo '</tr>';

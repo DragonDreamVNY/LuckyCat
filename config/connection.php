@@ -21,11 +21,11 @@ if ( $conn->connect_error ) {
 		exit;
 	}
 	exit("<p>PHP script terminated. Database connection failed</p>");
-} else{
+} 
+else{
     if($conn){ //database connect successful
         if (__DEBUG==TRUE) {
             echo "<p>Database Connected</p>";
-            print_r($conn);
         }
     }
 }

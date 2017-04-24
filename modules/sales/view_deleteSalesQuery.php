@@ -33,6 +33,8 @@ if (session_status() == PHP_SESSION_NONE) {
 <?php 
 	echo $contentStringMAIN;
 	
+
+	
 	if ($_SESSION['validID']){ //if a valid ID has been selected - confirm deletion
 		generateTable($table, $arrayTitles, $arrayData);	
 		include ('forms/confirmSalesDeleteForm.html');

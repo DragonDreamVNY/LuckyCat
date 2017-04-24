@@ -1,3 +1,3 @@
 <footer id="SiteFooter">
-<php? "&copy; 2016 - echo date(Y) Vincent Lee"; ?>
+<p>"&copy; 2017 Vincent Lee" </p>
 </footer>

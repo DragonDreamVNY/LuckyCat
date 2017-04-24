@@ -22,17 +22,18 @@
                 <label for "dineIn_sales"> DineIn: €</label>
                 <input name="dineIn_sales" id="dineIn_sales"  class="form-control salesInputs" type="number" step="0.10" value="" required>
                 <br>
-                <label for "takeOut_sales">TakeOut: €</label>
-                <input name="takeOut_sales" id="takeOut_sales" class="form-control salesInputs" type="number" step="0.10" value="" required>     
+                <label for "takeAway_sales">TakeOut: €</label>
+                <input name="takeAway_sales" id="takeAway_sales" class="form-control salesInputs" type="number" step="0.10" value="" required>     
                 <br>
                 <label for "delivery_sales">Deliveries: €</label>
                 <input name="delivery_sales" id="delivery_sales" class="form-control salesInputs" type="number" step="0.01" value="" required> 
+                <input type = "hidden" name="transactionID" id="transactionID"> 
                 <div id="saleSumTotal"></div>    
             </div>
         </div>
         <div>
             <label>
-                <input name="btn_insertSales" class="btn btn-primary" type="submit" id="insertSales_Button" value="Insert">
+                <input name="btn_actionSales" class="btn btn-primary" type="submit" id="btn_actionSales" value="INSERT">
             </label>
 
             <!--for update queries on current record selected-->

@@ -13,7 +13,7 @@ if(!isset($_SESSION['loginAttempts'])){$_SESSION['loginAttempts']=0;}
 if(!isset($_SESSION['views'])){$_SESSION['views']=0;}
 
 // $_SESSION['loggedin']=TRUE; //logged In
-
+// echo $CTRLmsg;
 include_once("config/connection.php");  //include the database connection 
 include_once("config/config.php");  //include the application configuration settings
 
@@ -37,10 +37,10 @@ include_once("config/config.php");  //include the application configuration sett
 
 //prepare view template values
 $tab='Lucky Cat Dashboard';
-$pageHeading='Sales Page';
+$pageHeading='Lucky Charms';
 
 //initialise variables
-$table='sales';  //table to insert values into
+$table='luckCharms';  //table to insert values into
 $msg='';  //this is an empty message initially , it will contain the result of the insertion
 
 // =====================
@@ -48,12 +48,14 @@ $msg='';  //this is an empty message initially , it will contain the result of t
 // =====================
 $outputTable = '';
  
-$sqlViewQuery = "SELECT * FROM weekly_sales_total";
+$sqlViewQuery = "SELECT * FROM luckycat.view_lucky_charms_withUser;";
 
-//=====================
-// execute the SALES VIEW and populate Table
+// =====================
+// LUCKY CHARMS TABLE
+// execute the CHARMS joined VIEW and populate Table
+// =====================
 if( mysqli_query($conn,$sqlViewQuery)==TRUE ) { // table query success
-	$msg .= "<h2>Sales Data</h2>";
+	$msg .= "<h2>Lucky Charms Promos</h2>";
 	$result = mysqli_query($conn,$sqlViewQuery); // store View in result variable
 	// construct the table headers
 	if(__DEBUG == TRUE){
@@ -64,34 +66,36 @@ if( mysqli_query($conn,$sqlViewQuery)==TRUE ) { // table query success
 
 	//(3) HTML Table is created filled with data sent to "resultsTable" placeholder
 	$outputTable .= '
-		<table class="table-bordered salesTable">
+		<table id="luckyCharmsTable"  class="table-bordered charmsTable">
 			<tr>
-				<th class="tableHeader" width="10%">TransactionID</th>
-				<th class="tableHeader" width="15%">Date</th>
-				<th class="tableHeader" width="25%">Total €</th>
-				<th class="tableHeader" width="17%">Dine In Sales €</th>
-				<th class="tableHeader" width="17%">Take Out Sales €</th>
-				<th class="tableHeader" width="16%">Delivery Sales € </th>
+				<th class="tableHeader" width="10%">CharmID</th>
+				<th class="tableHeader" width="15%">Lucky Charm Name</th>
+				<th class="tableHeader" width="30%">Description</th>
+				<th class="tableHeader" width="14%">STATUS</th>
+				<th class="tableHeader" width="15%">Last Updated by</th>
 			</tr>
 	';
 	// fetch the data and populate
 	if( mysqli_num_rows($result) > 0 ) {
+		$charmStatus = '';
 		// go through each column [Field] in associative array $row
 		while( $row = mysqli_fetch_array($result) ){
+			
+			if($row["charm_Status"] == 1 ){ $charmStatus = 'ON'; }
+			elseif($row["charm_Status"] == 0 ){ $charmStatus = 'OFF'; }
 
 			$outputTable .= ' 
-				<tr id="salesRow_'.$row["TransactionID"].'">
-					<td align="center" class="tableContent">'.$row["TransactionID"].'</td>
-					<td align="center" class="tableContent">'.$row["SalesDate"].'</td>
-					<td align="center" class="tableContent">'.$row["TotalSales"].'</td>
-					<td align="center" class="tableContent">'.$row["DineInSales"].'</td>
-					<td align="center" class="tableContent">'.$row["TakeAwaySales"].'</td>
-					<td align="center" class="tableContent">'.$row["DeliverySales"].'</td>
+				<tr id="charmsRow_'.$row["charm_ID"].'">
+					<td align="center" class="tableContent">'.$row["charm_ID"].'</td>
+					<td align="center" class="tableContent">'.$row["charm_Name"].'</td>
+					<td align="center" class="tableContent">'.$row["charm_Description"].'</td>
+					<td align="center" class="tableContent charmStatusCell" id="charmStatusCell-'.$row["charm_ID"].'">'.$charmStatus.'</td>
+					<td align="center" class="tableContent">'.$row["user_LogInName"].'</td>
 					
-					<form class="form-group"  action="controller_selectEditDeleteSales.php" method="post">
-					<td><input class="editSales_button btn btn-warning" id="'.$row["TransactionID"].'" type="submit" name="editSales_button" value="EDIT"></td>
-					<td><input class="delSales_button btn btn-danger" id="'.$row["TransactionID"].'" type="submit" name="delSales_button" value="DELETE"></td>
-					<input type="hidden" value="'.$row['TransactionID'].'" name="TransactionID">
+					<form class="form-group"  action="controller_editCharms.php" method="post">
+					<td><input class="editCharm_button btn btn-warning" id="edit-'.$row["charm_ID"].'" type="submit" name="editCharm_button" value="EDIT"></td>
+					<td><input class="delCharm_button btn btn-danger" id="delete-'.$row["charm_ID"].'" type="submit" name="delCharm_button" value="DELETE"></td>
+					<input type="hidden" value="'.$row['charm_ID'].'" name="charm_ID">
 				</tr>
 			';       
 		}
@@ -105,12 +109,11 @@ if( mysqli_query($conn,$sqlViewQuery)==TRUE ) { // table query success
 	}
 	$outputTable .= '</table>';
 	
-} // end VIEW query
+} // end CHARMS VIEW query
+//----------------------------
 
 
-
-// VIEWS
-
+// VIEWS variables
 // =====================
 // 		NAVIGATION
 // =====================
@@ -125,31 +128,32 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
 
 				<ul class="nav navbar-nav">
 					<li><a href="index.php">Home</a></li>
-					<li class="active"><a href="controller_sales.php">Sales</a></li>
+					<li><a href="controller_sales.php">Sales</a></li>
 					<li><a href="controller_performance.php">Performance View</a></li>
-					<li><a href="controller_charms.php">Lucky Charms</a></li>
+					<li class="active"><a href="controller_charms.php">Lucky Charms</a></li>
 				</ul>	
 			</div>
 		</div>';
 }
 
-// ACCOUNTANT
-else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') ) {
+// MARKETER
+else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='marketer') ) {
 	//nav section content - logged in user
 	// $contentStringNAV='<header id="SiteHeader" class = "header">';
-	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
-	$contentStringNAV.= 	'<div class="container">';
-	$contentStringNAV.= 		'<div class="navbar-header">';
-	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
-	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '
+		<div class="navbar navbar-default" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+				<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>
+				</div>
 
-	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
-	$contentStringNAV.= 		'<li><a href="index.php">Home</a></li>';
-	$contentStringNAV.= 		'<li class="active"><a href="controller_sales.php">Sales</a></li>'; //sales main page
-	$contentStringNAV.= 		'<li><a href="controller_performance.php">Performance View</a></li>';
-	$contentStringNAV.= 	'</ul>';	
-	$contentStringNAV.= 	'</div>';
-	$contentStringNAV.= '</div>';
+				<ul class="nav navbar-nav">
+					<li><a href="index.php">Home</a></li>
+					<li><a href="controller_performance.php">Performance View</a></li>
+					<li class="active"><a href="controller_charms.php">Lucky Charms</a></li>
+				</ul>	
+			</div>
+		</div>';
 	// $contentStringNAV.= '</header>';
 
 }
@@ -180,8 +184,13 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
 			<img src="images/luckycatDash.png" alt="lucky cat logo"><br>
 		</p>';
 
-	// Sales CRUD Options INSERT or EDIT/DELETE
-    $contentStringMAIN.='';
+	// ToDo: CRUD Options INSERT or EDIT/DELETE here for Lucky Charms
+	// options:
+	// a. pop up modal with form (works better with AJAX to prevent page refresh after Form POST)
+	// b. standard input form with hidden fields.
+	// To Do: carry SESSION for "ON" or active Lucky Charms to Front page to append to div? 
+	// ?? how to carry more than one item from each "ON" row?
+	// ?? AJAX to call fetchLuckyCharms() and return only rows with luckycharm_status== 1 ???
 
 
     //logout form
@@ -190,9 +199,9 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
 	$contentStringMAIN.='</form>';
 }
 //------------------
-// ACCOUNTANT
+// MARKETER
 //------------------
-else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') ) {
+else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='marketer') ) {
 	//main section content - logged in user
     //$contentStringMAIN.='<p>Welcome '.$_SESSION['user_FirstName'].' to your Dashboard.</p>';
 
@@ -202,9 +211,6 @@ else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') 
 		<p class="lead">
 			<img src="images/luckycatDash.png" alt="lucky cat logo"><br>
 		</p>';
-
-
-
 
     //logout form
 	$contentStringMAIN.='
@@ -217,7 +223,7 @@ else{
 	// 		Log In Form
 	// =====================
 	//main section content - user not logged in
-	// shouldn't be on this page if controller did its job
+	// shouldn't be on this page if controller did its job, NOT LOGGED IN user would be redirected to HOME with Log In Form
 
 	$contentStringMAIN.='
 		<form class="login" method="post" action="controller_login_manager.php">
@@ -242,15 +248,9 @@ else{
 				</div>
 			</div>
 		</form>';
-
-	// $dateTest = "<script>
-    // moment( ($('#saleDate').val())), 'YYYY-MM-DD' );
-    //  </script>";
 }
 
-// =====================
-// 		FOOTER
-// =====================
+//footer section content
 $contentStringFOOTER='';
 if (__DEBUG==TRUE) //construct the footer with debug information 
 	{	
@@ -288,3 +288,6 @@ else{ //construct the standard footer
 }
 
 ?>
+<script>
+
+</script>

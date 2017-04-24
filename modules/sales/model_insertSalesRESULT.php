@@ -1,7 +1,7 @@
 <?php
 //insert SALES call Stored Procedure
 
-$table='sales';  //table to insert values into
+$table='weekly_sales_total';  //table to insert values into
 	
 //INSERT QUERY
 //get the values entered in the form
@@ -12,28 +12,32 @@ $table='sales';  //table to insert values into
 // $deliverSales = $conn->real_escape_string($_POST['delivery_sales']);	
 
 if (isset($_POST['transactionID'])) { $transactionID = 	mysqli_real_escape_string($conn, $_POST['transactionID']); } else{ $transactionID = ''; }
-if (isset($_POST['sale_date'])) { $saleDate = 			mysqli_real_escape_string($conn, $_POST['sale_date']); } 	 else{ $saleDate = ''; }
-if (isset($_POST['dineIn_sales'])) { $dineSales = 		mysqli_real_escape_string($conn, $_POST['dineIn_sales']); }  else{ $dineSales = ''; }
-if (isset($_POST['takeOut_sales'])) { $takeSales = 		mysqli_real_escape_string($conn, $_POST['takeOut_sales']); } else{ $takeSales = ''; }
-if (isset($_POST['delivery_sales'])) { $deliverSales = 	mysqli_real_escape_string($conn, $_POST['delivery_sales']); }else{ $deliverSales = ''; }
+if (isset($_POST['sale_date'])) { $salesDate = 			mysqli_real_escape_string($conn, $_POST['sale_date']); } 	 else{ $saleDate = ''; }
+if (isset($_POST['dineIn_sales'])) { $dineInSales = 		mysqli_real_escape_string($conn, $_POST['dineIn_sales']); }  else{ $dineSales = ''; }
+if (isset($_POST['takeAway_sales'])) { $takeAwaySales = 		mysqli_real_escape_string($conn, $_POST['takeAway_sales']); } else{ $takeSales = ''; }
+if (isset($_POST['delivery_sales'])) { $deliverySales = 	mysqli_real_escape_string($conn, $_POST['delivery_sales']); }else{ $deliverSales = ''; }
 
 //$dateUnformatted = strtotime($saleDate);
 //$mysqlDate = date( 'Y-m-d', $saleDate );
 
-$dateParts = explode('-', $saleDate); // to reformat from 'DD-MM-YYYY'
+$dateParts = explode('-', $salesDate); // to reformat from 'DD-MM-YYYY'
 $mysqlDate = "$dateParts[2]-$dateParts[1]-$dateParts[0]"; // to 'YYYY-MM-DD'
 
 /*=================================
 / call insert Sales Stored Procedure
 =================================*/
-// $sqlInsert = "INSERT INTO sales (sales_TransactionID, sales_Date, dineIn_Sales, takeAway_Sales, delivery_Sales) VALUES('', '".$mysqlDate."', '".$dineSales."', '".$takeSales."', '".$deliverSales."' )";
-// $sqlInsert = "INSERT INTO weekly_sales_itemised VALUES('', '".$mysqlDate."', '".$dineSales."', '".$takeSales."', '".$deliverSales."' )";
-$sqlInsert = "CALL insert_weekly_sales('".$mysqlDate."', '".$dineSales."', '".$takeSales."', '".$deliverSales."')";
+// $sqlInsert = "INSERT INTO sales (sales_TransactionID, sales_Date, dineIn_Sales, takeAway_Sales, delivery_Sales) VALUES('', '".$mysqlDate."', '".$dineInSales."', '".$takeAwaySales."', '".$deliverySales."' )";
+// $sqlInsert = "INSERT INTO weekly_sales_itemised VALUES('', '".$mysqlDate."', '".$dineInSales."', '".$takeAwaySales."', '".$deliverySales."' )";
+$sqlInsert = "CALL insert_weekly_sales('".$mysqlDate."', '".$dineInSales."', '".$takeAwaySales."', '".$deliverySales."')";
+$insert_row = mysqli_query($conn,$sqlInsert);
 
 //execute the INSERT query
-if(mysqli_query($conn,$sqlInsert)==TRUE) { // this actually executes ths query
-    $msg.= "<h3>SUCCESS: New data inserted</h3>";
-
+if($insert_row) { // this actually executes ths query
+    $msg.= '
+	<h3>SUCCESS: New data inserted</h3>
+	<a href="controller_insertSales.php">
+		<button class="btn btn-default">Click Here to Return to Sales Form</button>
+	</a>';
 }
 else {
     $msg.=  "<h3>FAILED: New data NOT inserted</h3>";
@@ -42,7 +46,7 @@ else {
 //prepare the result of the insertion for display in a view
 
 //Query string
-// $sqlData="SELECT * FROM $table WHERE LectID='$lectID'";  //get the data from the table
+// $sqlData="SELECT * FROM $table WHERE TransactionID='$transactionID'";  //get the data from the table
 // $sqlTitles="SHOW COLUMNS FROM $table";  //get the table column descriptions
 
 // //execute the 2 queries
@@ -82,9 +86,8 @@ if ($_SESSION['loggedin']==TRUE){
 	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
 	$contentStringNAV.= 		'<li><a href="index.php">Home</a></li>';
 	$contentStringNAV.= 		'<li class="active"><a href="controller_sales.php">Sales</a></li>';
-	$contentStringNAV.= 		'<li><a href="modules/performance//view_kpi.php">Performance View</a></li>';
-	$contentStringNAV.= 		'<li><a href="modules/luckycharms/luckycharms.php">Lucky Charms</a></li>';
-	$contentStringNAV.= 		'<li><a href="controller_login_manager.php">RELOAD</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_charms.php">Lucky Charms</a></li>';
 	$contentStringNAV.= 	'</ul>';	
 	$contentStringNAV.= 	'</div>';
 	$contentStringNAV.= '</div>';
@@ -103,10 +106,10 @@ else{
 // 		MAIN
 // =====================
 //main section content:
-$contentStringMAIN="<h4>$contentStringMAIN message from Model insertSalesRESULT</h4>";
+$contentStringMAIN="<h4> message from Model insertSalesRESULT</h4>";
 $contentStringMAIN.='
 <div>
-	<h3>Your inputs</h3>
+	<h4>Your inputs</h4>
 	<p>'.$salesTransactionIDAUTO.'</p>
 	<p>'.$mysqlDate.'</p>
 	<p>'.$dineSales.'</p>

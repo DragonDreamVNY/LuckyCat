@@ -92,32 +92,68 @@ $output = '';
 // 		NAVIGATION
 // =====================
 //nav section content - logged in user
-// $contentStringNAV='<header id="SiteHeader" class = "header">';
-if ($_SESSION['loggedin']==TRUE){
-    
-	//$msg='Well...';
+// ADMIN or MANAGER
+if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='manager') ) {
 	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">
-							<div class="container">
-							<div class="navbar-header">
-						 		<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>
-					 		</div>
-							<ul class="nav navbar-nav">
-								<li><a href="index.php"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;Home</a></li>
-						 		<li class="active"><a href="controller_sales.php">Sales</a></li>
-						 		<li><a href="modules/performance//view_kpi.php">Performance View</a></li>
-						 		<li><a href="modules/luckycharms/luckycharms.php">Lucky Charms</a></li>
-						 		<li><a href="controller_login_manager.php">RELOAD</a></li>
-						 	</ul>	
-						 	</div>
-						 </div>';
-// $contentStringNAV.= '</header>';
+			<div class="container">
+				<div class="navbar-header">
+				<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>
+				</div>
+
+				<ul class="nav navbar-nav">
+					<li><a href="index.php"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;Home</a></li>
+					<li class="active"><a href="controller_sales.php">Sales</a></li>
+					<li><a href="controller_performance.php">Performance View</a></li>
+					<li><a href="controller_charms.php">Lucky Charms</a></li>
+				</ul>	
+			</div>
+		</div>';
+}
+// MARKETING
+else if( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='marketer') ) {
+	//nav section content - logged in user
+	// $contentStringNAV='<header id="SiteHeader" class = "header">';
+	$contentStringNAV.= "<h2>Welcome $userFirstName</h2>";
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
+	$contentStringNAV.= 	'<div class="container">';
+	$contentStringNAV.= 		'<div class="navbar-header">';
+	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
+	$contentStringNAV.= 	'</div>';
+
+	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
+	$contentStringNAV.= 		'<li"><a href="index.php">Home</a></li>';
+	$contentStringNAV.= 		'<li class="active"><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_charms.php">Lucky Charms</a></li>';
+	$contentStringNAV.= 	'</ul>';	
+	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '</div>';
+	// $contentStringNAV.= '</header>';
+}
+// ACCOUNTANT
+else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') ) {
+	//nav section content - logged in user
+	// $contentStringNAV='<header id="SiteHeader" class = "header">';
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
+	$contentStringNAV.= 	'<div class="container">';
+	$contentStringNAV.= 		'<div class="navbar-header">';
+	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
+	$contentStringNAV.= 	'</div>';
+
+	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
+	$contentStringNAV.= 		'<li><a href="index.php">Home</a></li>';
+	$contentStringNAV.= 		'<li class="active"><a href="controller_sales.php">Sales</a></li>'; //sales main page
+	$contentStringNAV.= 		'<li><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 	'</ul>';	
+	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '</div>';
+	// $contentStringNAV.= '</header>';
+
 }
 else{
 	//nav section content - not logged in
 	$contentStringNAV='';
-	$contentStringNAV.='You Are NOT LOGGED IN';
+	$contentStringNAV.='You Are NOT LOGGED IN boo';
 	$contentStringNAV.='<a href="controller_main.php">HOME</a></br>';
-    $msg='Not Logged In';
 }
 
 // =====================

@@ -21,13 +21,15 @@ include_once("config/config.php");  //include the application configuration sett
 
 //variables
 $tab="Lucky Cat Dashboard";
-$pageHeading='Insert Sales Page';
+$pageHeading='Lucky Charms Page';
 
 //views
 if($_SESSION['loggedin'] == TRUE){  //already logged in
 	$CTRLmsg='Controller Msg: You are Logged In';
 	$userFirstName = $_SESSION['user_FirstName'];
 	$userLogInName = $_SESSION['user_LogInName'];
+	$userRole = $_SESSION['user_Role'];
+
 	//echo "Hello $userFirstName.";
 
 	//variables
@@ -38,21 +40,21 @@ if($_SESSION['loggedin'] == TRUE){  //already logged in
 			//process the inserted Sales data
 			include("library/helperFunctionsDatabase.php");
 			include("library/helperFunctionsTables.php");
-			include("modules/sales/model_insertSalesRESULT.php"); 
-			include("modules/sales/view_insertSalesRESULT.php");
+			include("modules/luckycharms/model_insertLuckyCharms.php"); 
+			include("modules/luckycharms/view_insertLuckyCharms.php");
 		}		
 		elseif( $_POST['btn_actionSales'] == "EDIT"){
 			//process the inserted Sales data
 			include("library/helperFunctionsDatabase.php");
 			include("library/helperFunctionsTables.php");
-			include("modules/sales/model_editSales.php"); 
-			include("modules/sales/view_editSales.php");
+			include("modules/luckycharms/model_editLuckyCharms.php"); 
+			include("modules/luckycharms/view_editLuckyCharms.php");
 		}
 	}	
-	else{ // load the insertSales form	
-		include("modules/sales/model_insertSales.php"); 
-		//echo "<p>insert Sales model loaded</p>";
-		include("modules/sales/view_insertSales.php");
+	else{ // load the charms view	
+		include("modules/luckycharms/model_luckyCharms.php"); 
+		// echo "<p>Lucky model loaded</p>";
+		include("modules/luckycharms/view_luckyCharms.php");
 	}
 } // end if LOGGED IN == TRUE
 

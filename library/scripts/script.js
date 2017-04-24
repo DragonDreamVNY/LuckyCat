@@ -60,30 +60,38 @@ function totalSales(){
 	});
 } // end saleSumTotal
 
-// uses MySQL '$sqlViewQuery' in "selectSales.php". VIEW is:  'weekly_sales_total' 
+/*==============================================
+				LOAD SALES
+// uses MySQL '$sqlViewQuery' in "selectSales.php". 
+	VIEW is:  'weekly_sales_total' 
 // updates PHP table using AJAX loaded JSON data
-function fetchSales(){ 
-	var action = "select"; //use this in PHP
+==========================================*/
+function loadSales(){ 
+	var action = "Load"; //use this in PHP
 	$.ajax({
 		url:"modules/sales/selectSales.php", // call the variables from the model for AJAX rewrite
 		method:"POST", // sends data to server
 		data:{action:action}, // when 'action' button is pressed
 		success:function(data){ // success callback function, receives data from server stored
-			// console.log("========================");
+			console.log("========================");
+			console.log("fetching sales");
 			// console.log("data");
 			// console.log(data);
+			console.log("finished fetching sales");
 			console.log("========================");
-			
+
 			// clear the input fields
 			$('#sale_date').val('');
 			$('#dineIn_sales').val('');
-			$('#takeOut_sales').val('');
+			$('#takeAway_sales').val('');
 			$('#delivery_sales').val('');
-			$('#action').text('INSERT'); //overwrite action button text
-			$('#resultsTable').html(data); // generate the Table for div with id 'resultTable'
+			$('#action').text('INSERT'); //overwrite action button text to default
+			$('#resultsTable').html(data); // generate the Table for div with id 'resultTable'	
+			
 		}
 	})
-} // end fetchSales
+} // end loadSales
+
 
 	
 

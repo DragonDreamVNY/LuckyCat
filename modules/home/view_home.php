@@ -56,6 +56,16 @@
 <?php echo $contentStringFOOTER; ?>
 <!-- JAVASCRIPT -->
 <?php require('inc/tail.php'); ?>
+<!--<?php include('inc/footer.php'); ?>-->
+
+<!--<footer class="copyright">
+    Copyright 2017 Vincent Lee
+</footer>-->
+
+
+<footer class="copyright">
+&copy; <?php echo date("Y"); ?> Vincent Lee. All Rights Reserved
+</footer>
 </body>
 </html>
 

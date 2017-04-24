@@ -1,8 +1,13 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 // (1) PHP opens a connection to a MySQL server
 // include_once("config/connection.php");  //include the database connection 
 // include_once("config/config.php");  //include the application configuration settings
-// using include 'connection', is connected to database but AJAX table doesn't load unless using the connection below?
+// ??? PROBLEM ??? using include 'connection', is connected to database but AJAX table
+// doesn't load unless using the hardcoded connection below?
 
 $conn = mysqli_connect("localhost", "root", "root", "luckycat");  
 //=====================
@@ -21,8 +26,7 @@ if ( $conn->connect_error ) {
 } else{
     if($conn){ //database connect successful
         if (__DEBUG==TRUE) {
-            echo "<p>Database Connected</p>";
-            print_r($conn);
+            echo "<h3>Database Connected</h3>";
         }
     }
 }
@@ -43,7 +47,6 @@ if( isset($_POST["action"]) ){ // 'action' on insertSales/crudSales form
     // $sqlViewQuery = "CALL view_weekly_procedure()"; 
 
 
-
     //=====================
     // execute the VIEW 
 
@@ -59,7 +62,7 @@ if( isset($_POST["action"]) ){ // 'action' on insertSales/crudSales form
 
         //(3) HTML Table is created filled with data sent to "resultsTable" placeholder
         $output .= '
-            <table class="<table table-bordered salesTable">
+            <table class="table-bordered salesTable">
                 <tr>
                     <th class="tableHeader" width="10%">TransactionID</th>
                     <th class="tableHeader" width="15%">Date</th>
@@ -72,17 +75,22 @@ if( isset($_POST["action"]) ){ // 'action' on insertSales/crudSales form
         // fetch the data and populate
         if( mysqli_num_rows($result) > 0 ) {
             // go through each column [Field] in associative array $row
-            while( $row = mysql_fetch_field($result) ){
+            while( $row = mysqli_fetch_array($result) ){
+
                 $output .= ' 
-                    <tr>
+                    <tr id="salesRow_'.$row["TransactionID"].'">
                         <td align="center" class="tableContent">'.$row["TransactionID"].'</td>
                         <td align="center" class="tableContent">'.$row["SalesDate"].'</td>
                         <td align="center" class="tableContent">'.$row["TotalSales"].'</td>
                         <td align="center" class="tableContent">'.$row["DineInSales"].'</td>
                         <td align="center" class="tableContent">'.$row["TakeAwaySales"].'</td>
                         <td align="center" class="tableContent">'.$row["DeliverySales"].'</td>
-                        <td><button type="button" name="updateSales" id="'.$row["TransactionID"].'" class="updateSales btn-default">UPDATE</button></td>
-                        <td><button type="button" name="deleteSales" id="'.$row["TransactionID"].'" class="deleteSales btn-danger">DELETE</button></td>
+                        <td>
+                            <button type="button" name="updateSales_button" id="update-'.$row["TransactionID"].'" class="updateSales_button btn-default">UPDATE</button>
+                        </td>
+                        <td>
+                            <button type="button" name="delSales_button" class="delSales_button btn-danger" id="del-'.$row["TransactionID"].'">DELETE</button>
+                        </td>
                     </tr>
                 ';       
             }

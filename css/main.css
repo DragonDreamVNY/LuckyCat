@@ -142,6 +142,12 @@ tr:hover {
   background-color: #A6B1E1; /*MAXIMUS BLUE PURPLE*/
 }
 
+#resultsTable tr.selectedRow {
+	background: #DECDF5;
+}
+
+.charmsTable td .charmStatusON { background: #7BB661; } /*SPRING GREEN*/
+.charmsTable td .charmStatusOFF { background: #E9AFA3; } /*PASTEL PINK*/
 /*===============*/
 /*Password Strength classes*/
 /*===============*/
@@ -183,7 +189,7 @@ Morris Chart styles
 }
 
 .tab-box .panel-heading > .nav-tabs {
-    float: right;
+    /*float: right;*/
     margin-top: -2px;
     display: inline-block;
     border-bottom: 0;

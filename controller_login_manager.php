@@ -84,10 +84,10 @@ if(isset($_POST['login'])){// Has the login button been pressed?
 	$userID = mysqli_real_escape_string($conn, $_POST['username']);
 	$userPW = mysqli_real_escape_string($conn, $_POST['password']);
 	//$passEncrypt= hash('ripemd160', $userPW);  //encrypt the password 	
-	$passEncrypted = sha1("$salt1$userPW$salt2");  //encrypt the password 	
+	$passwordEncrypted = sha1("$salt1$userPW$salt2");  //encrypt the password 	
 
 	//construct the SQL query  
-	$sql= "SELECT * FROM $table WHERE user_LogInName='$userID' AND user_Password='$passEncrypted'"; //password is encrypted in DB
+	$sql= "SELECT * FROM $table WHERE user_LogInName='$userID' AND user_Password='$passwordEncrypted'"; //password is encrypted in DB
 	//$msg=$sql;
 	
 	//execute the query

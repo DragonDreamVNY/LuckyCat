@@ -1,0 +1,82 @@
+<html>
+ <HEAD>    
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+</HEAD>
+<body>
+<div id="status_text">
+    Fill -ID,NAME,EMAIL_ID,PASSWORD,CREDITS,
+
+    ID: <input type="text" id="ID" name="ID"><br><br>
+    NAME: <input type="text" id="NAME" name="NAME"><br><br>
+    PASSWORD: <input type="text"  id= "PASSWORD"name="PASSWORD"><br><br>
+    CREDITS: <input type="text" Id= "CREDITS"name="CREDITS"><br><br>
+    Email_ID: <input type="text" id="EMAIL_ID"name="EMAIL_ID"><br><br>
+    CREATED_ON:<input type="text" id="CREATED_ON" name="CREATED_ON"><br><br>
+    MODIFIED_ON:<input type="text" id="MODIFIED_ON" name="MODIFIED_ON"><br><br>
+    <input type="submit"  id="btn_submit" name="submit" value="Send"/>
+</div>
+
+<script>
+//Browser Support Code
+ function ajaxFunction(){
+ var ajaxRequest;  // The variable that makes Ajax possible!
+
+ try{
+   // Opera 8.0+, Firefox, Safari
+   ajaxRequest = new XMLHttpRequest();
+ }catch (e){
+   // Internet Explorer Browsers
+   try{
+      ajaxRequest = new ActiveXObject("Msxml2.XMLHTTP");
+   }catch (e) {
+      try{
+         ajaxRequest = new ActiveXObject("Microsoft.XMLHTTP");
+      }catch (e){
+         // Something went wrong
+         alert("Your browser broke!");
+         return false;
+      }
+   }
+ } }
+//on the click of the submit button 
+$("#btn_submit").click(function(){
+    //get the form values
+ var ID = $('#ID').val();     
+ var NAME = $('#NAME').val();     
+ var PASSWORD = $('#PASSWORD').val();
+ var CREDITS = $('#CREDITS').val();
+ var EMAIL_ID = $('#EMAIL_ID').val();
+ var CREATED_ON = $('#CREATED_ON').val();
+ var MODIFIED_ON = $('#MODIFIED_ON').val();
+ // make the postdata
+ // var postData = '&ID='+ID+'&NAME='+NAME+'&PASSWORD='+PASSWORD+'&CREDITS'+CREDITS+'&EMAIL_ID'+EMAIL_ID+'&CREATED_ON'+CREATED_ON+'&MODIFIED_ON'+MODIFIED_ON;
+ // alert(postData);
+ var myData={"ID":ID,"NAME":NAME,"PASSWORD":PASSWORD,"CREDITS":CREDITS,"EMAIL_ID":EMAIL_ID,"CREATED_ON":CREATED_ON,"MODIFIED_ON":MODIFIED_ON};
+ //call your .php script in the background, 
+ //when it returns it will call the success function if the request was successful or 
+ //the error one if there was an issue (like a 404, 500 or any other error status)
+ $.ajax({
+    url : "Form_Data.php",
+    type: "POST",
+    data : myData,
+    success: function(data,status,xhr)
+     {
+        //if success then just output the text to the status div then clear the form inputs to prepare for new data
+        $("#status_text").html(data);
+        $('#ID').val();
+        $('#NAME').val('');
+        $('#PASSWORD').val('');
+        $('#EMAIL_ID').val('');
+        $('#CREATED_ON').val('');
+        $('#MODIFIED_ON').val('');
+         }
+
+}); 
+}); 
+</script>
+
+
+
+</body>
+</div>
+</html>

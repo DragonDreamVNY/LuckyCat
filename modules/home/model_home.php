@@ -8,14 +8,24 @@ if(!isset($_SESSION['loggedin'])){ $_SESSION['loggedin']=FALSE; }
 if(!isset($_SESSION['loginAttempts'])){$_SESSION['loginAttempts'] = 0;}
 if(!isset($_SESSION['views'])){$_SESSION['views'] = 0;}
 
+if ($_SESSION['loggedin']==TRUE) {
+	$userFirstName = $_SESSION['user_FirstName'];
+	$userLogInName = $_SESSION['user_LogInName'];
+    $userRole = $_SESSION['user_Role'];
+}
 //template values
 $title='Lucky Cat Dashboard';
 $pageHeading='Log In';
 
-if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='owner') ) {
+//====================
+// NAV
+//====================
+
+// ADMIN or MANAGER
+if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='manager') ) {
 	//nav section content - logged in user
 	// $contentStringNAV='<header id="SiteHeader" class = "header">';
-	$contentStringNAV.= '<h2>Welcome</h2>';
+	$contentStringNAV.= "<h2>Welcome $userFirstName</h2>";
 	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
 	$contentStringNAV.= 	'<div class="container">';
 	$contentStringNAV.= 		'<div class="navbar-header">';
@@ -27,13 +37,56 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
 	$contentStringNAV.= 		'<li><a href="controller_sales.php">Sales</a></li>'; //sales main page
 	$contentStringNAV.= 		'<li><a href="controller_performance.php">Performance View</a></li>';
 	$contentStringNAV.= 		'<li><a href="controller_charms.php">Lucky Charms</a></li>';
-	$contentStringNAV.= 		'<li><a href="controller_login_manager.php">RELOAD</a></li>';
 	$contentStringNAV.= 	'</ul>';	
 	$contentStringNAV.= 	'</div>';
 	$contentStringNAV.= '</div>';
 	// $contentStringNAV.= '</header>';
 
 }
+
+// MARKETING
+else if( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='marketer') ) {
+	//nav section content - logged in user
+	// $contentStringNAV='<header id="SiteHeader" class = "header">';
+	$contentStringNAV.= "<h2>Welcome $userFirstName</h2>";
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
+	$contentStringNAV.= 	'<div class="container">';
+	$contentStringNAV.= 		'<div class="navbar-header">';
+	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
+	$contentStringNAV.= 	'</div>';
+
+	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
+	$contentStringNAV.= 		'<li class="active"><a href="index.php">Home</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_charms.php">Lucky Charms</a></li>';
+	$contentStringNAV.= 	'</ul>';	
+	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '</div>';
+	// $contentStringNAV.= '</header>';
+}
+
+// ACCOUNTANT
+else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') ) {
+	//nav section content - logged in user
+	// $contentStringNAV='<header id="SiteHeader" class = "header">';
+	$contentStringNAV.= "<h2>Welcome $userFirstName</h2>";
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
+	$contentStringNAV.= 	'<div class="container">';
+	$contentStringNAV.= 		'<div class="navbar-header">';
+	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
+	$contentStringNAV.= 	'</div>';
+
+	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
+	$contentStringNAV.= 		'<li class="active"><a href="index.php">Home</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_sales.php">Sales</a></li>'; //sales main page
+	$contentStringNAV.= 		'<li><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 	'</ul>';	
+	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '</div>';
+	// $contentStringNAV.= '</header>';
+
+}
+
 else{
 	//nav section content - not logged in
 	$contentStringNAV='';
@@ -49,12 +102,14 @@ else{
 	$contentStringNAV.= '</div>';
 }
 $pageHeading = "";
+//====================
 //main section content:
+//====================
 $contentStringMAIN=''; 
-if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='owner') ) {
-	//main section content - logged in user
-    $contentStringMAIN.='<p>Welcome '.$_SESSION['user_FirstName'].' to your Dashboard.</p>';
 
+// ADMIN or MANAGER
+if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='manager') ) {
+	//main section content - logged in user
     $contentStringMAIN.='<div class="jumbotron">';
 	$contentStringMAIN.=	'<h1>Lucky Cat Business Dashboard</h1>';
 	$contentStringMAIN.=	'<p class="lead">';
@@ -62,7 +117,7 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
 	$contentStringMAIN.=	'</p>';
     $contentStringMAIN.=	'<div class="btn-group">';
 
-    $contentStringMAIN.=		'<a href="controller_crudSales.php"><button class="btn btn-success" role="button">';
+    $contentStringMAIN.=		'<a href="controller_sales.php"><button class="btn btn-success" role="button">';
     $contentStringMAIN.=		'Sales Data';
     $contentStringMAIN.=		'</button></a>';
 
@@ -70,7 +125,35 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
     $contentStringMAIN.=		'Performance View';
     $contentStringMAIN.=		'</button></a>';
 
-    $contentStringMAIN.=		'<a href="modules/luckycharms/view_luckycharms.php"><button class="btn btn-danger" role="button">';
+    $contentStringMAIN.=		'<a href="controller_charms.php"><button class="btn btn-danger" role="button">';
+    $contentStringMAIN.=		'Lucky Charms';
+    $contentStringMAIN.=		'</button></a>';
+    $contentStringMAIN.=	'</div>';
+    $contentStringMAIN.='</div>';
+
+
+    //logout form
+	$contentStringMAIN.='
+	<form method="post" action="controller_login_manager.php">
+		<input name="logout3" type="submit" id="logout3" value="Log Out">
+	</form>';
+
+}
+// MARKETING
+else if( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='marketer') ) {
+	//main section content - logged in user
+    $contentStringMAIN.='<div class="jumbotron">';
+	$contentStringMAIN.=	'<h1>Lucky Cat Business Dashboard</h1>';
+	$contentStringMAIN.=	'<p class="lead">';
+	$contentStringMAIN.=	'<img src="images/luckycatDash.png" alt="lucky cat logo"><br>';
+	$contentStringMAIN.=	'</p>';
+    $contentStringMAIN.=	'<div class="btn-group">';
+
+	$contentStringMAIN.=		'<a href="controller_performance.php"><button class="btn btn-primary" role="button">';
+    $contentStringMAIN.=		'Performance View';
+    $contentStringMAIN.=		'</button></a>';
+
+    $contentStringMAIN.=		'<a href="controller_charms.php"><button class="btn btn-danger" role="button">';
     $contentStringMAIN.=		'Lucky Charms';
     $contentStringMAIN.=		'</button></a>';
     $contentStringMAIN.=	'</div>';
@@ -81,7 +164,33 @@ if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESS
 	$contentStringMAIN.='<form method="post" action="controller_login_manager.php">';
 	$contentStringMAIN.='<input name="logout3" type="submit" id="logout3" value="Log Out">';
 	$contentStringMAIN.='</form>';
+}
+// ACCOUNTANT
+else if( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') ) {
+	//main section content - logged in user
+    $contentStringMAIN.='<div class="jumbotron">';
+	$contentStringMAIN.=	'<h1>Lucky Cat Business Dashboard</h1>';
+	$contentStringMAIN.=	'<p class="lead">';
+	$contentStringMAIN.=	'<img src="images/luckycatDash.png" alt="lucky cat logo"><br>';
+	$contentStringMAIN.=	'</p>';
+    $contentStringMAIN.=	'<div class="btn-group">';
 
+	$contentStringMAIN.=		'<a href="controller_sales.php"><button class="btn btn-success" role="button">';
+    $contentStringMAIN.=		'Sales Data';
+    $contentStringMAIN.=		'</button></a>';
+
+	$contentStringMAIN.=		'<a href="controller_performance.php"><button class="btn btn-primary" role="button">';
+    $contentStringMAIN.=		'Performance View';
+    $contentStringMAIN.=		'</button></a>';
+
+    $contentStringMAIN.=	'</div>';
+    $contentStringMAIN.='</div>';
+
+
+    //logout form
+	$contentStringMAIN.='<form method="post" action="controller_login_manager.php">';
+	$contentStringMAIN.='<input name="logout3" type="submit" id="logout3" value="Log Out">';
+	$contentStringMAIN.='</form>';
 }
 else{
 	// Log In Form
@@ -113,7 +222,9 @@ else{
 	$contentStringMAIN.='</div>';
 }
 
-//footer section content
+// =====================
+// 		FOOTER
+// =====================
 $contentStringFOOTER='';
 if (__DEBUG==TRUE) //construct the footer with debug information 
 {	
@@ -149,11 +260,11 @@ if (__DEBUG==TRUE) //construct the footer with debug information
         $contentStringFOOTER.=  "</footer>";
 }
 else{ //construct the standard footer
-	$contentStringFOOTER.='<footer class="copyright">';
-	
-	$contentStringFOOTER.= "</footer>";
-}
+	$contentStringFOOTER.='
+	<footer class="copyright">
+	</footer>';
 
+}
 ?>
 
 

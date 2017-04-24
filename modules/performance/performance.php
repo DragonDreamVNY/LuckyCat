@@ -24,7 +24,6 @@ if ( $conn->connect_error ) {
     if($conn){ //database connect successful
         if (__DEBUG==TRUE) {
             echo "<h4>Database Connected</h4>";
-            print_r($conn);
         }
     }
 }
@@ -106,23 +105,74 @@ include("inc/head.php");
 <!--============= NAVIGATION section=============-->
 <!--========================================-->
 <nav>
+
+<?php
+// ADMIN or MANAGER
+if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='admin') || ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='manager') ) {
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">
+			<div class="container">
+				<div class="navbar-header">
+				<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>
+				</div>
+
+				<ul class="nav navbar-nav">
+					<li><a href="index.php"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;Home</a></li>
+					<li><a href="controller_sales.php">Sales</a></li>
+					<li class="active"><a href="controller_performance.php">Performance View</a></li>
+					<li><a href="controller_charms.php">Lucky Charms</a></li>
+				</ul>	
+			</div>
+		</div>';
+}
+// MARKETING
+else if( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='marketer') ) {
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
+	$contentStringNAV.= 	'<div class="container">';
+	$contentStringNAV.= 		'<div class="navbar-header">';
+	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
+	$contentStringNAV.= 	'</div>';
+
+	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
+	$contentStringNAV.= 		'<li><a href="index.php">Home</a></li>';
+	$contentStringNAV.= 		'<li class="active"><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_charms.php">Lucky Charms</a></li>';
+	$contentStringNAV.= 	'</ul>';	
+	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '</div>';
+}
+// ACCOUNTANT
+else if ( ($_SESSION['loggedin']==TRUE && $_SESSION['user_Role']=='accountant') ) {
+	//nav section content - logged in user
+	// $contentStringNAV='<header id="SiteHeader" class = "header">';
+	$contentStringNAV.= '<div class="navbar navbar-default" role="navigation">';
+	$contentStringNAV.= 	'<div class="container">';
+	$contentStringNAV.= 		'<div class="navbar-header">';
+	$contentStringNAV.= 		'<a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>';
+	$contentStringNAV.= 	'</div>';
+
+	$contentStringNAV.= 	'<ul class="nav navbar-nav">';
+	$contentStringNAV.= 		'<li><a href="index.php">Home</a></li>';
+	$contentStringNAV.= 		'<li><a href="controller_sales.php">Sales</a></li>'; //sales main page
+	$contentStringNAV.= 		'<li class="active"><a href="controller_performance.php">Performance View</a></li>';
+	$contentStringNAV.= 	'</ul>';	
+	$contentStringNAV.= 	'</div>';
+	$contentStringNAV.= '</div>';
+	// $contentStringNAV.= '</header>';
+}
+else{
+	//nav section content - not logged in
+	$contentStringNAV='';
+	$contentStringNAV.='You Are NOT LOGGED IN boo';
+	$contentStringNAV.='<a href="controller_main.php">HOME</a></br>';
+}
+
+echo $contentStringNAV;
+?>
+
+
+
 <!--<?php include("inc/nav.php"); ?>-->
 
-<div class="navbar navbar-default" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="index.php"><img src="images/luckyLogo.png" alt = "lucky cat logo"></a>
-      </div>
-
-        <ul class="nav navbar-nav">
-          <li><a href="index.php"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;Home</a></li> 
-          <li><a href="controller_sales.php">Sales</a></li>
-          <li class="active"><a href="controller_performance.php">Performance View</a></li>
-          <li><a href="controller_luckycharms.php">Lucky Charms</a></li>
-        </ul>
-
-    </div>
-  </div>
 </nav>
 
 
@@ -154,7 +204,7 @@ include("inc/head.php");
 
                         </div>
                         <div id="salesChart">
-                            <!--2016 Line chart-->
+                         <!--LINE CHART GETS FILLED by MORRIS-->
                         </div>
                         <div class="legend"> 
                             <span id="total_sales_legend" class="label">Total</span>
@@ -171,7 +221,9 @@ include("inc/head.php");
                         <div class="caption">Weekly Sales for 2016 <span class="label label-default">€/week</span>
 
                         </div>
-                        <div id="salesChart2017"></div>
+                        <div id="salesChart2017">
+                        <!--CHART GETS FILLED by MORRIS-->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -266,6 +318,8 @@ Morris.Line({
 
     hideHover:'auto'
 });
+
+var form_data = $("#formSales").serialize();
 
 
 

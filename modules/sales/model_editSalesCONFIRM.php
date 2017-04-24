@@ -3,41 +3,42 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-$table = 'sales';
+include_once("config/connection.php");  //include the database connection 
+include_once("config/config.php");  //include the application configuration settings
+
+$table='sales';  //table to insert values into
+$pageHeading='Edit Sales Page';
+//INSERT QUERY
+
+if (isset($_POST['transactionID'])) { $transactionID = 	mysqli_real_escape_string($conn, $_POST['transactionID']); } else{ $transactionID = ''; }
+if (isset($_POST['sale_date'])) { $salesDate = 			mysqli_real_escape_string($conn, $_POST['sale_date']); } 	 else{ $saleDate = ''; }
+if (isset($_POST['dineIn_sales'])) { $dineInSales = 		mysqli_real_escape_string($conn, $_POST['dineIn_sales']); }  else{ $dineSales = ''; }
+if (isset($_POST['takeAway_sales'])) { $takeAwaySales = 		mysqli_real_escape_string($conn, $_POST['takeAway_sales']); } else{ $takeSales = ''; }
+if (isset($_POST['delivery_sales'])) { $deliverySales = 	mysqli_real_escape_string($conn, $_POST['delivery_sales']); }else{ $deliverSales = ''; }
+
+//$dateUnformatted = strtotime($saleDate);
+//$mysqlDate = date( 'Y-m-d', $saleDate );
+
+$dateParts = explode('-', $salesDate); // to reformat from 'DD-MM-YYYY'
+$mysqlDate = "$dateParts[2]-$dateParts[1]-$dateParts[0]"; // to 'YYYY-MM-DD'
+
+
 
 /*=================================
 / fetch data from current EDIT row
 =================================*/
-//get the value from the hidden field in insertSales Form. ID is of the current row
-$TransactionID = mysqli_real_escape_string($conn,$_POST['TransactionID']);
 
-//Construct Query 
-$sqlData= "SELECT * FROM $table WHERE sales_TransactionID='$TransactionID'";
 
-//execute the query
-$rsData = getTableData($conn,$sqlData);
+//execute the INSERT query
+if($insert_row) { // this actually executes ths query
+    $msg.= "<h3>SUCCESS: New data inserted</h3>";
 
-//check if the id entered is valid
-if($rsData->num_rows==1){
-	$rsData->data_seek(0); //point to first row of resultset object returned from query
-	$row = $rsData->fetch_assoc();
-	$_SESSION['TransactionID']=$TransactionID;
-	$_SESSION['salesDate']=$row['sales_Date'];
-	$_SESSION['dineInSales']=$row['dineIn_Sales'];
-	$_SESSION['takeAwaySales']=$row['takeAway_Sales'];
-	$_SESSION['deliverySales']=$row['delivery_Sales'];
-	$_SESSION['validTransactionID']=TRUE;	//set a session vaiable to track and use for Confirm DELETE
-	$msg.='Valid TransactionID found';
 }
-else
-{
-	$_SESSION['validTransactionID']=FALSE;	
-	$msg.='TransactionIDEntered is NOT found. ';
+else {
+    $msg.=  "<h3>FAILED: New data NOT inserted</h3>";
 }
-		
-//close the connection
-$conn->close();
 
+//prepare the result of the insertion for display in a view
 
 //Query string
 // $sqlData="SELECT * FROM $table WHERE LectID='$lectID'";  //get the data from the table
@@ -62,7 +63,7 @@ $conn->close();
 
 //-----------------------------------------------------
 //prepare view template values
-$pageHeading='Edit Sales';
+$pageHeading='Insert Sales Results';
 
 // =====================
 // 		NAVIGATION
